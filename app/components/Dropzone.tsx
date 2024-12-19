@@ -5,9 +5,15 @@ import { useUser } from "@clerk/nextjs";
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 
+interface FileData {
+  name: string;
+  size: number;
+}
+
 function MyDropzone() {
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
+  const [fileData, setFileData] = useState<FileData>();
 
   const onDrop = (acceptedFiles: File[]) => {
     acceptedFiles.forEach((file) => {
@@ -37,6 +43,13 @@ function MyDropzone() {
       // Example upload request
       // await fetch("/api/upload", { method: "POST", body: formData });
       console.log("File uploaded successfully!");
+      const fileData = file;
+      const fileObj = {
+        name: fileData.name,
+        size: fileData.size,
+      };
+      setFileData(fileObj);
+      console.log(file.size);
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
@@ -100,6 +113,16 @@ function MyDropzone() {
       )}
 
       {fileRejections.length > 0 && renderRejectionMessages()}
+      <div>{fileData?.name}</div>
+      <div>
+        {fileData?.size < 100000 ? (
+          <p>{Math.floor(fileData!.size / 1000)} KB</p>
+        ) : fileData?.size < 10000000 ? (
+          <p>{Math.floor(fileData!.size / 1000000).toFixed(1)} MB</p>
+        ) : (
+          ""
+        )}
+      </div>
     </section>
   );
 }
