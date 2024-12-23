@@ -113,12 +113,16 @@ function MyDropzone() {
       )}
 
       {fileRejections.length > 0 && renderRejectionMessages()}
-      <div>{fileData?.name}</div>
-      <div>
-        {fileData?.size < 100000 ? (
-          <p>{Math.floor(fileData!.size / 1000)} KB</p>
-        ) : fileData?.size < 10000000 ? (
-          <p>{Math.floor(fileData!.size / 1000000).toFixed(1)} MB</p>
+      <div className=" bg-blue-200 dark:bg-slate-400 text-black flex justify-between p-4 my-4 rounded border border-blue-700 ">
+        <div>{fileData?.name}</div>
+        {fileData?.size !== undefined ? (
+          fileData.size < 100000 ? (
+            <p>{Math.floor(fileData.size / 1000)} KB</p>
+          ) : fileData.size < 10000000 ? (
+            <p>{(fileData.size / 1000000).toFixed(1)} MB</p>
+          ) : (
+            ""
+          )
         ) : (
           ""
         )}
